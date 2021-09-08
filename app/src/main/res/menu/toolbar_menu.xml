@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--
+    <item
+        android:title="switch"
+        android:id="@+id/switch_to_room"
+        android:actionLayout="@layout/switch_layout"
+        app:showAsAction="always"
+        android:orderInCategory="1"
+        /> -->
+    <item
+        android:title="Sort"
+        android:id="@+id/sort_dog_button"
+        app:showAsAction="collapseActionView"
+        android:orderInCategory="1"
+        />
+    <item
+        android:title="Search"
+        android:id="@+id/search_dog_button"
+        app:showAsAction="collapseActionView"
+        android:orderInCategory="2"
+        />
+
+
+
+
+</menu>

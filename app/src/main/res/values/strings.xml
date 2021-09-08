@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">DogHostel</string>
+    <string name="preference_file_key">base_variant</string>
+    <string name="base_default_key">SQLite</string>
+    <string name="switch_condition">false</string>
+    <string name="update">UPDATE</string>
+    <string name="add_dog">ADD DOG</string>
+
+</resources>
