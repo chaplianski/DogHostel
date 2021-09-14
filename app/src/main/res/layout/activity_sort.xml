@@ -10,48 +10,77 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="151dp"
-        android:layout_marginTop="87dp"
-        android:layout_marginEnd="151dp"
-        android:layout_marginBottom="625dp"
-        android:text="Sort By"
+        android:text="SORT BY"
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.461" />
+        app:layout_constraintVertical_bias="0.023" />
 
     <Button
         android:id="@+id/bt_sort_dog_nickname"
         android:layout_width="300dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="76dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="24dp"
         android:text="Nickname"
         app:layout_constraintEnd_toEndOf="@+id/textView"
+        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
         android:id="@+id/bt_sort_dog_gender"
         android:layout_width="300dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="40dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="12dp"
         android:text="Gender"
         app:layout_constraintEnd_toEndOf="@+id/bt_sort_dog_nickname"
-        app:layout_constraintHorizontal_bias="0.476"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/bt_sort_dog_nickname"
         app:layout_constraintTop_toBottomOf="@+id/bt_sort_dog_nickname" />
 
     <Button
         android:id="@+id/bt_sort_dog_age"
         android:layout_width="300dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="40dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="12dp"
         android:text="Age"
         app:layout_constraintEnd_toEndOf="@+id/bt_sort_dog_gender"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/bt_sort_dog_gender"
         app:layout_constraintTop_toBottomOf="@+id/bt_sort_dog_gender" />
+
+    <Button
+        android:id="@+id/bt_sort_dog_cage"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="12dp"
+        android:text="Number of cages"
+        app:layout_constraintEnd_toEndOf="@+id/bt_sort_dog_age"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/bt_sort_dog_age"
+        app:layout_constraintTop_toBottomOf="@+id/bt_sort_dog_age" />
+
+    <Button
+        android:id="@+id/bt_sort_dog_days"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="12dp"
+        android:text="Days in hostel"
+        app:layout_constraintEnd_toEndOf="@+id/bt_sort_dog_cage"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/bt_sort_dog_cage"
+        app:layout_constraintTop_toBottomOf="@+id/bt_sort_dog_cage" />
+
+    <Button
+        android:id="@+id/bt_sort_dog_cancel"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="12dp"
+        android:text="Cancel"
+        app:layout_constraintEnd_toEndOf="@+id/bt_sort_dog_days"
+        app:layout_constraintStart_toStartOf="@+id/bt_sort_dog_days"
+        app:layout_constraintTop_toBottomOf="@+id/bt_sort_dog_days" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

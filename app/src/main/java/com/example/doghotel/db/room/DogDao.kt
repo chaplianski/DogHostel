@@ -13,13 +13,15 @@ interface DogDao {
 
     @Query("SELECT * FROM dog_table ORDER BY dogID")
     fun getAll(): List<Dog>
-//    @Query("SELECT * FROM dog_table ORDER BY dogID ASC")
-//    fun readAllData(): LiveData<List<Dog>>
 
     @Update
     fun updateDog (dog: Dog)
 
     @Delete
     fun deleteDog (dog: Dog)
+
+    @Query("SELECT cage FROM dog_table")
+    fun getCages(): List<Int>
+
 
 }

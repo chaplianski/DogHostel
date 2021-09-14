@@ -53,6 +53,8 @@ class MainActivity : AppCompatActivity() {
         var sharedPref = this.getSharedPreferences(
             getString(R.string.preference_file_key), Context.MODE_PRIVATE)
 
+        //****** Base switcher *******
+
         findViewById<Switch>(R.id.switch_room).setOnCheckedChangeListener { _, isChecked ->
 
             val baseVariant: String
@@ -64,7 +66,7 @@ class MainActivity : AppCompatActivity() {
                 baseVariant = "SQLite"
                 findViewById<Switch>(R.id.switch_room).text = "SQLite"
             }
-            Log.d("MyLog", "Переключились на $baseVariant")
+        //    Log.d("MyLog", "Переключились на $baseVariant")
             val editor:SharedPreferences.Editor = sharedPref.edit()
             editor.putString(getString(R.string.preference_file_key), baseVariant)
             editor.apply()
@@ -77,9 +79,8 @@ class MainActivity : AppCompatActivity() {
         val baseVariant = sharedPref.getString(getString(R.string.preference_file_key), defaultValue).toString()
 
         if (baseVariant == "Room") {
-            findViewById<Switch>(R.id.switch_room).isChecked = true
             findViewById<Switch>(R.id.switch_room).text = "Room"
-        } else {findViewById<Switch>(R.id.switch_room).isChecked = false
+        }else {
             findViewById<Switch>(R.id.switch_room).text = "SQLite"
         }
    //     Log.d("MyLog", "В мэйн пришла база $baseVariant")
@@ -92,11 +93,11 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<FloatingActionButton>(R.id.add_button).setOnClickListener {
             val i = Intent (this, DogCardActivity::class.java)
-   //         i.putExtra("dbVariant", base)
             startActivity(i)
             finishAffinity()
         }
 
+        // ****** Search option ******
         binding.searchField.addTextChangedListener(object : TextWatcher {
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -105,8 +106,9 @@ class MainActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
                 if (binding.searchField.text.isNotEmpty()){
+                    searchDogFilter.clear()
                     for (i in 0 until dogsList.size){
-                        if (dogsList[i].nickname.contains(s.toString()))
+                        if (dogsList[i].nickname.uppercase().contains(s.toString().uppercase()))
                             searchDogFilter.add(dogsList[i])
                     }
                     val adapter = DogRvAdapter(this@MainActivity, searchDogFilter)
@@ -138,10 +140,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
+        // ******* Filling recycler items  and sorting *******
         private fun viewDogs(baseVariant: String)  {
-
-            Log.d("MyLog", "Получена через шадов база $baseVariant")
 
         if (baseVariant == "SQLite") {
                dogsList = dbHelper.getDogs(this@MainActivity)
@@ -156,6 +156,8 @@ class MainActivity : AppCompatActivity() {
             if (intent.extras?.getString("nickname")=="1") dogsList.sortBy {it.nickname}
             if (intent.extras?.getString("nickname")=="2") dogsList.sortBy {it.gender}
             if (intent.extras?.getString("nickname")=="3") dogsList.sortBy {it.age}
+            if (intent.extras?.getString("nickname")=="4") dogsList.sortBy {it.cage}
+            if (intent.extras?.getString("nickname")=="5") dogsList.sortBy {it.days}
             val adapter = DogRvAdapter(this@MainActivity, dogsList)
             val rv: RecyclerView = binding.rvDogs
             rv.layoutManager = LinearLayoutManager(this@MainActivity)
@@ -163,29 +165,25 @@ class MainActivity : AppCompatActivity() {
             dogClickItems(dogsList, adapter)
     }
 
+        // ****** Click items ******
+        fun dogClickItems(clickedList: ArrayList<Dog>, adapter: DogRvAdapter){
+            adapter.setOnClickDogListner(object : DogRvAdapter.onClickDogListner{
+                override fun onItemClick(position: Int) {
+                    val i = Intent(this@MainActivity, DogCardActivity::class.java)
+                    i.putExtra("position", clickedList[position].dogID)
+                    i.putExtra("nick", clickedList[position].nickname)
+                    i.putExtra("gend", clickedList[position].gender)
+                    i.putExtra("ag", clickedList[position].age.toString())
+                    i.putExtra("photoUri", clickedList[position].photo)
+                    i.putExtra("days", clickedList[position].days.toString() )
 
-    fun dogClickItems(clickedList: ArrayList<Dog>, adapter: DogRvAdapter){
-        adapter.setOnClickDogListner(object : DogRvAdapter.onClickDogListner{
-            override fun onItemClick(position: Int) {
-                val i = Intent(this@MainActivity, DogCardActivity::class.java)
-                i.putExtra("position", clickedList[position].dogID)
-                i.putExtra("nick", clickedList[position].nickname)
-                i.putExtra("gend", clickedList[position].gender)
-                i.putExtra("ag", clickedList[position].age.toString())
- //               i.putExtra("dbVariant", base)
-                Log.d("MyLog", position.toString())
-                Log.d("MyLog", clickedList[position].dogID.toString())
-
-                startActivity(i)
-
-                //  Toast.makeText(this@MainActivity, "Click $position", Toast.LENGTH_LONG).show()
-            }
-
-        })
-    }
+                    startActivity(i)
+                    }
+                })
+        }
 
 
-
+        //******* Toolbar option menu ******
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         return true
@@ -199,6 +197,10 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.search_dog_button -> {
                 binding.searchLayout.visibility = VISIBLE
+            }
+            R.id.settings_dog_button -> {
+                val i = Intent(this, Settings::class.java)
+                startActivity(i)
             }
         }
         return true

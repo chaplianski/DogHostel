@@ -4,27 +4,50 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import com.example.doghotel.databinding.ActivitySortBinding
+
+lateinit var binding: ActivitySortBinding
 
 class SortActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sort)
+        binding = ActivitySortBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        findViewById<Button>(R.id.bt_sort_dog_nickname).setOnClickListener(){
+        binding.btSortDogNickname.setOnClickListener(){
            val i = Intent (this, MainActivity::class.java)
             i.putExtra("nickname", "1")
             startActivity(i)
-            finish()
+            finishAffinity()
         }
-        findViewById<Button>(R.id.bt_sort_dog_gender).setOnClickListener(){
+        binding.btSortDogGender.setOnClickListener(){
             val i = Intent (this, MainActivity::class.java)
             i.putExtra("nickname", "2")
             startActivity(i)
+            finishAffinity()
         }
-        findViewById<Button>(R.id.bt_sort_dog_age).setOnClickListener(){
+        binding.btSortDogAge.setOnClickListener(){
             val i = Intent (this, MainActivity::class.java)
             i.putExtra("nickname", "3")
             startActivity(i)
+            finishAffinity()
+        }
+        binding.btSortDogCage.setOnClickListener(){
+            val i = Intent (this, MainActivity::class.java)
+            i.putExtra("nickname", "4")
+            startActivity(i)
+            finishAffinity()
+        }
+        binding.btSortDogDays.setOnClickListener(){
+            val i = Intent (this, MainActivity::class.java)
+            i.putExtra("nickname", "5")
+            startActivity(i)
+            finishAffinity()
+        }
+        binding.btSortDogCancel.setOnClickListener(){
+            val i = Intent (this, MainActivity::class.java)
+            startActivity(i)
+            finishAffinity()
         }
 
 

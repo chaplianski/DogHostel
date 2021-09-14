@@ -21,11 +21,13 @@ class DbHelper (context: Context): SQLiteOpenHelper (
         const val COLUMN_NAME_NICKNAME = "nickname"
         const val COLUMN_NAME_GENDER = "gender"
         const val COLUMN_NAME_AGE = "age"
-    //    const val COLUMN_NAME_DAYS = "days"
+        const val COLUMN_NAME_DAYS = "days"
+        const val COLUMN_NAME_CAGE = "cage"
+        const val COLUMN_NAME_PHOTO = "photo"
 
         const val CREATE_TABLE = "CREATE TABLE $TABLE_NAME ($COLUMN_NAME_ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
-                "$COLUMN_NAME_NICKNAME TEXT NOT NULL, $COLUMN_NAME_GENDER TEXT NOT NULL, $COLUMN_NAME_AGE INTEGER NOT NULL);"
-    //            "$COLUMN_NAME_DAYS LONG NOT NULL);"
+                "$COLUMN_NAME_NICKNAME TEXT NOT NULL, $COLUMN_NAME_GENDER TEXT NOT NULL, $COLUMN_NAME_AGE INTEGER NOT NULL, "+
+                "$COLUMN_NAME_DAYS LONG NOT NULL, $COLUMN_NAME_CAGE INTEGER NOT NULL, $COLUMN_NAME_PHOTO TEXT NOT NULL);"
         const val SQL_DELITE_TABLE = "DROP TABLE IF EXIST $TABLE_NAME"
 
     }
@@ -58,7 +60,9 @@ class DbHelper (context: Context): SQLiteOpenHelper (
                 dog.nickname = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_NICKNAME))
                 dog.gender = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_GENDER))
                 dog.age = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_AGE))
-            //    dog.days = cursor.getLong(cursor.getColumnIndex(COLUMN_NAME_DAYS))
+                dog.days = cursor.getLong(cursor.getColumnIndex(COLUMN_NAME_DAYS))
+                dog.cage = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_CAGE))
+                dog.photo = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_PHOTO))
                 dogs.add(dog)
 
                 //    val  dataText = cursor.getString(cursor.getColumnIndex(MyDbNamesClass.COLUMN_NAME_TITLE))
@@ -74,7 +78,9 @@ class DbHelper (context: Context): SQLiteOpenHelper (
         values.put(COLUMN_NAME_NICKNAME, dog.nickname)
         values.put(COLUMN_NAME_GENDER, dog.gender)
         values.put(COLUMN_NAME_AGE, dog.age)
-     //   values.put(COLUMN_NAME_DAYS, dog.days)
+        values.put(COLUMN_NAME_DAYS, dog.days)
+        values.put(COLUMN_NAME_CAGE, dog.cage)
+        values.put(COLUMN_NAME_PHOTO, dog.photo)
         val db = this.writableDatabase
         try {
             db.insert(TABLE_NAME, null, values)
@@ -107,6 +113,9 @@ class DbHelper (context: Context): SQLiteOpenHelper (
         contentValues.put(COLUMN_NAME_NICKNAME, dog.nickname)
         contentValues.put(COLUMN_NAME_GENDER, dog.gender)
         contentValues.put(COLUMN_NAME_AGE, dog.age)
+        contentValues.put(COLUMN_NAME_DAYS, dog.days)
+        contentValues.put(COLUMN_NAME_CAGE, dog.cage)
+        contentValues.put(COLUMN_NAME_PHOTO, dog.photo)
         try {
             db.update(TABLE_NAME,contentValues, "$COLUMN_NAME_ID = ?", arrayOf(dog.dogID.toString()))
   //          updateResult = true
@@ -117,6 +126,28 @@ class DbHelper (context: Context): SQLiteOpenHelper (
         }
      //   return updateResult
     }
+
+    fun  getCageArray (): ArrayList<Int>{
+        val dogSelect = "Select * From $TABLE_NAME"
+        val db = this.readableDatabase
+        val cursor = db?.rawQuery(dogSelect, null)
+        val cages = ArrayList<Int>()
+            if(cursor?.count == 0) {
+            } else {
+
+            while (cursor?.moveToNext()!!) {
+
+                val cage = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_CAGE))
+                cages.add(cage)
+            }
+        }
+        cursor.close()
+        db.close()
+        Log.d("MyLog", cages.toString())
+        return cages
+    }
+
+
 
 }
 
