@@ -14,8 +14,8 @@ class Settings : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
 
 
-        var cageNumber = "50"
-        var sharedPref = this.getSharedPreferences(
+        var cageNumber: String
+        val sharedPref = this.getSharedPreferences(
             getString(R.string.cage_numbers), Context.MODE_PRIVATE)
         findViewById<Button>(R.id.bt_setting_ok).setOnClickListener{
             cageNumber = findViewById<TextView>(R.id.tv_setting_number_cage).text.toString()

@@ -3,8 +3,7 @@ package com.example.doghotel.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.LocalDate
-import java.util.*
+
 
 @Entity (tableName = "dog_table")
 data class Dog(
@@ -13,7 +12,7 @@ data class Dog(
     @ColumnInfo (name = "nickname") var nickname: String = "",
     @ColumnInfo (name = "gender") var gender: String = "",
     @ColumnInfo (name = "age") var age: Int = 1,
-    @ColumnInfo (name = "days") var days: Long = 0 ,
+    @ColumnInfo (name = "days") var days: Long = 1L ,
     @ColumnInfo (name = "cage") var cage: Int = 0,
     @ColumnInfo (name = "photo") var photo: String = ""
 

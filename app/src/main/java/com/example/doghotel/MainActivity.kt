@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
      private lateinit var mDogDatabase: DogDatabase
      var searchDogFilter: ArrayList<Dog> = ArrayList<Dog>()
 
-    @SuppressLint("ResourceType")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -144,7 +144,7 @@ class MainActivity : AppCompatActivity() {
         private fun viewDogs(baseVariant: String)  {
 
         if (baseVariant == "SQLite") {
-               dogsList = dbHelper.getDogs(this@MainActivity)
+               dogsList = dbHelper.getDogs()
                  Log.d("MyLog", "Сработал SQLite")
         }
         else {
@@ -167,7 +167,7 @@ class MainActivity : AppCompatActivity() {
 
         // ****** Click items ******
         fun dogClickItems(clickedList: ArrayList<Dog>, adapter: DogRvAdapter){
-            adapter.setOnClickDogListner(object : DogRvAdapter.onClickDogListner{
+            adapter.setOnClickDogListener(object : DogRvAdapter.onClickDogListner{
                 override fun onItemClick(position: Int) {
                     val i = Intent(this@MainActivity, DogCardActivity::class.java)
                     i.putExtra("position", clickedList[position].dogID)

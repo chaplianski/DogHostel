@@ -28,7 +28,7 @@ class DbHelper (context: Context): SQLiteOpenHelper (
         const val CREATE_TABLE = "CREATE TABLE $TABLE_NAME ($COLUMN_NAME_ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                 "$COLUMN_NAME_NICKNAME TEXT NOT NULL, $COLUMN_NAME_GENDER TEXT NOT NULL, $COLUMN_NAME_AGE INTEGER NOT NULL, "+
                 "$COLUMN_NAME_DAYS LONG NOT NULL, $COLUMN_NAME_CAGE INTEGER NOT NULL, $COLUMN_NAME_PHOTO TEXT NOT NULL);"
-        const val SQL_DELITE_TABLE = "DROP TABLE IF EXIST $TABLE_NAME"
+        const val SQL_DELETE_TABLE = "DROP TABLE IF EXIST $TABLE_NAME"
 
     }
 
@@ -40,7 +40,7 @@ class DbHelper (context: Context): SQLiteOpenHelper (
         TODO("Not yet implemented")
     }
 
-    fun getDogs (dogContext: Context): ArrayList<Dog> {
+    fun getDogs(): ArrayList<Dog> {
         val dogSelect = "Select * From $TABLE_NAME"
         val db = this.readableDatabase
 
@@ -96,7 +96,7 @@ class DbHelper (context: Context): SQLiteOpenHelper (
         var deleteResult = false
         try {
          //   val cursor: Int = db.delete(TABLE_NAME, COLUMN_NAME_ID, arrayOf(dogID.toString()))
-        val cursor: Unit = db.execSQL(delete)
+            db.execSQL(delete)
             deleteResult = true
         } catch (e: Exception){
             Log.e(ContentValues.TAG, "Error Deleting")
@@ -105,7 +105,7 @@ class DbHelper (context: Context): SQLiteOpenHelper (
         return deleteResult
     }
 
-    fun updateDog (dogContext: Context, dog: Dog){
+    fun updateDog (dog: Dog){
         val db: SQLiteDatabase = this.writableDatabase
         val  contentValues = ContentValues()
   //      var updateResult = false
@@ -126,6 +126,7 @@ class DbHelper (context: Context): SQLiteOpenHelper (
         }
      //   return updateResult
     }
+
 
     fun  getCageArray (): ArrayList<Int>{
         val dogSelect = "Select * From $TABLE_NAME"

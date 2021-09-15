@@ -1,6 +1,6 @@
 package com.example.doghotel.db.room
 
-import androidx.lifecycle.LiveData
+
 import androidx.room.*
 import com.example.doghotel.model.Dog
 
@@ -20,8 +20,8 @@ interface DogDao {
     @Delete
     fun deleteDog (dog: Dog)
 
-    @Query("SELECT cage FROM dog_table")
-    fun getCages(): List<Int>
+ //   @Query("SELECT cage FROM dog_table")
+ //   fun getCagesArray(): ArrayList<Int>
 
 
 }

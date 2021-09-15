@@ -11,7 +11,8 @@
         android:theme="@style/Theme.DogHotel">
         <activity android:name=".Settings" />
         <activity android:name=".SortActivity" />
-        <activity android:name=".DogCardActivity" />
+        <activity android:name=".DogCardActivity"
+            android:screenOrientation="portrait"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -25,7 +26,8 @@
 
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
