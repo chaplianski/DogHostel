@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
                 baseVariant = "SQLite"
                 findViewById<Switch>(R.id.switch_room).text = "SQLite"
             }
-        //    Log.d("MyLog", "Переключились на $baseVariant")
+
             val editor:SharedPreferences.Editor = sharedPref.edit()
             editor.putString(getString(R.string.preference_file_key), baseVariant)
             editor.apply()
@@ -80,10 +80,10 @@ class MainActivity : AppCompatActivity() {
 
         if (baseVariant == "Room") {
             findViewById<Switch>(R.id.switch_room).text = "Room"
+            findViewById<Switch>(R.id.switch_room).isChecked = true
         }else {
             findViewById<Switch>(R.id.switch_room).text = "SQLite"
         }
-   //     Log.d("MyLog", "В мэйн пришла база $baseVariant")
 
         dbHelper = DbHelper(this)
 
@@ -175,7 +175,8 @@ class MainActivity : AppCompatActivity() {
                     i.putExtra("gend", clickedList[position].gender)
                     i.putExtra("ag", clickedList[position].age.toString())
                     i.putExtra("photoUri", clickedList[position].photo)
-                    i.putExtra("days", clickedList[position].days.toString() )
+                    i.putExtra("days", clickedList[position].days.toString())
+                    i.putExtra("cage", clickedList[position].cage.toString())
 
                     startActivity(i)
                     }

@@ -27,7 +27,7 @@ class DbHelper (context: Context): SQLiteOpenHelper (
 
         const val CREATE_TABLE = "CREATE TABLE $TABLE_NAME ($COLUMN_NAME_ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                 "$COLUMN_NAME_NICKNAME TEXT NOT NULL, $COLUMN_NAME_GENDER TEXT NOT NULL, $COLUMN_NAME_AGE INTEGER NOT NULL, "+
-                "$COLUMN_NAME_DAYS LONG NOT NULL, $COLUMN_NAME_CAGE INTEGER NOT NULL, $COLUMN_NAME_PHOTO TEXT NOT NULL);"
+                "$COLUMN_NAME_DAYS INTEGER NOT NULL, $COLUMN_NAME_CAGE INTEGER NOT NULL, $COLUMN_NAME_PHOTO TEXT NOT NULL);"
         const val SQL_DELETE_TABLE = "DROP TABLE IF EXIST $TABLE_NAME"
 
     }
@@ -60,7 +60,7 @@ class DbHelper (context: Context): SQLiteOpenHelper (
                 dog.nickname = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_NICKNAME))
                 dog.gender = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_GENDER))
                 dog.age = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_AGE))
-                dog.days = cursor.getLong(cursor.getColumnIndex(COLUMN_NAME_DAYS))
+                dog.days = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_DAYS))
                 dog.cage = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_CAGE))
                 dog.photo = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_PHOTO))
                 dogs.add(dog)

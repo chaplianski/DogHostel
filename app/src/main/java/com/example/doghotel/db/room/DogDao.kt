@@ -20,8 +20,8 @@ interface DogDao {
     @Delete
     fun deleteDog (dog: Dog)
 
- //   @Query("SELECT cage FROM dog_table")
- //   fun getCagesArray(): ArrayList<Int>
+    @Query("SELECT cage FROM dog_table")
+    fun getCagesArray(): List<Int>
 
 
 }

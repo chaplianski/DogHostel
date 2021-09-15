@@ -33,11 +33,11 @@ class DogCardActivity : AppCompatActivity() {
     var spinnerDogCageChoice = ""
     private lateinit var binding: ActivityDogCardBinding
     var gender: String? = null
+    var cage: Int = 1
     private val genderArray = arrayListOf("Male", "Female")
     private var arraySpinnerPosition = -1
     private var arrayCageSpinnerPosition = -1
     private var isPhotoed = false
-//    private val  TAKE_PHOTO_DOG = 1
     private lateinit var dogImage: ImageView
     private lateinit var photoFile: File
     private var photoUri = ""
@@ -71,7 +71,7 @@ class DogCardActivity : AppCompatActivity() {
         photoLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
                 result: ActivityResult ->
             if (result.resultCode == RESULT_OK){
-                Log.d("MyLog", "Photo add dog ${photoFile.absolutePath}")
+
                         Glide.with(this).load(photoFile.absoluteFile)
                             .error(com.example.doghotel.R.drawable.make_photo)
                             .into(binding.dogImageCard)
@@ -85,7 +85,6 @@ class DogCardActivity : AppCompatActivity() {
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
             try {
                 photoLauncher?.launch(Intent(takePictureIntent))
-             //   startActivityForResult(takePictureIntent, TAKE_PHOTO_DOG)
                 isPhotoed = true
             }catch (e: ActivityNotFoundException){
                 e.printStackTrace()
@@ -104,10 +103,11 @@ class DogCardActivity : AppCompatActivity() {
 
             val age = intent.extras!!.getString("ag")
             photoUri = intent.extras!!.getString("photoUri").toString()
-            gender = intent.extras?.getString("gend")
             binding.tvDogCardNickname.text = Editable.Factory.getInstance().newEditable(nickname)
             binding.tvDogCardAge.text = Editable.Factory.getInstance().newEditable(age)
-
+            cage = intent.extras!!.getString("cage").toString().toInt()
+            Log.d("MyLog", "Cage number ${cage}")
+            arrayCageSpinnerPosition = cage-1
 
         }
 
@@ -123,10 +123,12 @@ class DogCardActivity : AppCompatActivity() {
             binding.btDogCardAdd.setOnClickListener {
                 if(binding.tvDogCardNickname.text.isEmpty()){
                     binding.tvDogCardNickname.requestFocus()
+                    return@setOnClickListener
                 }
                 else {
                     if (binding.tvDogCardAge.text.isEmpty()) {
                         binding.tvDogCardAge.requestFocus()
+                        return@setOnClickListener
                     }
                     if (binding.tvDogCardAge.text.toString().toInt() >= 30) {
                         Toast.makeText(
@@ -141,7 +143,7 @@ class DogCardActivity : AppCompatActivity() {
                         dog.nickname = nickToUpperFirst(nick)
                         dog.gender = spinnerDogGenderChoice
                         dog.age = binding.tvDogCardAge.text.toString().toInt()
-                        dog.days = Date().time
+                        dog.days = Date().time.toInt()
                         dog.cage = spinnerDogCageChoice.toInt()
                         dog.photo = photoFile.absolutePath
 
@@ -176,12 +178,29 @@ class DogCardActivity : AppCompatActivity() {
                 val position =  intent.extras!!.getInt("position")
                 val photoUri = intent.extras!!.getString("photoUri")
                 dog.dogID = position
-                dog.nickname = binding.tvDogCardNickname.text.toString()
+                if(binding.tvDogCardNickname.text.isEmpty()){
+                    binding.tvDogCardNickname.requestFocus()
+                    return@setOnClickListener
+                }else {
+                    dog.nickname = binding.tvDogCardNickname.text.toString()
+                }
                 dog.gender = genderSpinner.selectedItem.toString()
-                dog.age = binding.tvDogCardAge.text.toString().toInt()
-                dog.cage = cageSpinner.selectedItem.toString().toInt()
+                if (binding.tvDogCardAge.text.isEmpty()) {
+                    binding.tvDogCardAge.requestFocus()
+                    return@setOnClickListener
+                }
+                if (binding.tvDogCardAge.text.toString().toInt() >= 30) {
+                    Toast.makeText(
+                        this,
+                        "Dogs not live such long. Please enter correct age, not more 30 years",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                    return@setOnClickListener
+                } else{dog.age = binding.tvDogCardAge.text.toString().toInt()}
 
-                dog.days = intent.extras!!.getString("days").toString().toLong()
+                dog.cage = cageSpinner.selectedItem.toString().toInt()
+                dog.days = intent.extras!!.getString("days").toString().toInt()
                 Log.d("MyLog", "days in card 2 ${intent.extras!!.getString("days").toString()}")
                 if (isPhotoed) dog.photo = fileUri
                 else dog.photo = photoUri.toString()
@@ -213,14 +232,11 @@ class DogCardActivity : AppCompatActivity() {
 
         val dog = Dog()
         val position =  intent.extras!!.getInt("position")
-            Log.d("MyLog", "Uri photo is:  $photoUri")
-
         val file = File(photoUri)
             file.delete()
             MediaScannerConnection.scanFile(this, arrayOf(file.toString()),
                 arrayOf(file.name), null)
 
-            Log.d("MyLog", "Uri photo is:  $photoUri")
             if (baseVariant == "SQLite") {
                 CoroutineScope(Dispatchers.IO).launch {
                     MainActivity.dbHelper.deleteDog(position)
@@ -234,7 +250,6 @@ class DogCardActivity : AppCompatActivity() {
                 }
             }
 
-
             val i = Intent(this, MainActivity::class.java)
             startActivity(i)
             finish()
@@ -247,8 +262,7 @@ class DogCardActivity : AppCompatActivity() {
         genderSpinner.adapter = arrayAdapter
         if (arraySpinnerPosition > -1) {
             genderSpinner.setSelection(arraySpinnerPosition, true)
- //           var spinnerPos = genderSpinner.setSelection(arraySpinnerPosition, true)
-        }
+         }
 
         genderSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -266,14 +280,13 @@ class DogCardActivity : AppCompatActivity() {
 
         // ***** Cage adapter *****
 
-        val freeCageArray = getFreeCages(cageNumber)
+        val freeCageArray = getFreeCages(cageNumber, baseVariant)
         val arrayCageAdapter = ArrayAdapter(this, R.layout.simple_spinner_item, freeCageArray)
         cageSpinner.adapter = arrayCageAdapter
 
         if (arrayCageSpinnerPosition > -1) {
             cageSpinner.setSelection(arrayCageSpinnerPosition, true)
-            //    var spinnerPos = cageSpinner.setSelection(arraySpinnerPosition, true)
-        }
+          }
 
         cageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -302,22 +315,27 @@ class DogCardActivity : AppCompatActivity() {
         return substring(string,0,1).uppercase()+substring(string, 1, string.length)
     }
 
-
     private fun getPhotoFile(fileName: String): File {
         val storageDirectory = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile(fileName, ".jpg", storageDirectory)
     }
 
-    private fun getFreeCages (cages: Int): ArrayList<Int>{
+    private fun getFreeCages (cages: Int, baseVariant: String): ArrayList<Int>{
+
         val freeCages: ArrayList<Int> = arrayListOf()
-        val cageArray = MainActivity.dbHelper.getCageArray()
-
-    //    val mDogDatabase = DogDatabase.getDatabase(this@DogCardActivity)
-    //    val cageArray: ArrayList<Int> = mDogDatabase.dogDao().getCagesArray()
-
+        var cageArray = arrayListOf<Int>()
+        if (baseVariant == "SQLite") {
+        cageArray = MainActivity.dbHelper.getCageArray()
+            Log.d("MyLog", "Variant base is: SQLite")
+        } else {
+            CoroutineScope(Dispatchers.IO).launch {
+                val mDogDatabase = DogDatabase.getDatabase(this@DogCardActivity)
+                cageArray = ArrayList (mDogDatabase.dogDao().getCagesArray())
+                Log.d("MyLog", "Variant base is: Room")
+            }
+        }
 
         cageArray.sort()
-
         for (i in 1..cages){
             var k = ""
             for (j in 0 until cageArray.size){
@@ -327,6 +345,11 @@ class DogCardActivity : AppCompatActivity() {
             freeCages.add(i)
         }
          return freeCages
+    }
+    override fun onBackPressed() {
+        val i = Intent(this, MainActivity::class.java)
+        startActivity(i)
+        finishAffinity()
     }
 }
 

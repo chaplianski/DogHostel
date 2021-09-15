@@ -59,19 +59,16 @@ class DogRvAdapter (dogContext: Context, private val dogs: ArrayList<Dog>):
         holder.tvItemDogAge.text = dog.age.toString()
         holder.tvItemDogCage.text = dog.cage.toString()
 
-        val currentTime = Date().time
+        val currentTime = Date().time.toInt()
         var days = ((currentTime - dog.days)/(1000*60*60*24)).toString().toInt()
-        Log.d("MyLog", "days:  $days")
         if (days < 1) days = 1
         holder.tvItemDogDays.text = days.toString()
-        Log.d("MyLog", "Current Time:  $currentTime")
-        Log.d("MyLog", "Begin Time:  ${dog.days}")
 
         Glide.with(dogContext).load(dog.photo)
             .error(R.drawable.ic_avatar_dog)
             .centerCrop()
             .placeholder(R.drawable.ic_avatar_dog)
-            .into(holder.ivItemDogPhoto);
+            .into(holder.ivItemDogPhoto)
     }
 
     override fun getItemCount(): Int {
